@@ -11,15 +11,23 @@ const client = new Client({
 	],
 });
 
-const prefix = ",";
+const prefix = "-";
 
 client.once("ready", () => {
 	console.log("Bot Online");
 });
 
-client.on("message", (message) => {
-	console.log(message.content);
-	message.channel.send("Woot!");
+client.on("messageCreate", (message) => {
+	if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+	const messageArray = message.content.slice(prefix.length).split(" ");
+	const command = messageArray[0].toLowerCase();
+
+	if (messageArray[0] === "") {
+		message.channel.send("Show help i.e. all the commands");
+	} else if (command === "play") {
+		message.channel.send("Play Songs");
+	}
 });
 
 client.login(process.env.TOKEN);
